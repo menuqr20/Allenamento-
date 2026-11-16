@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diario Allenamenti</title>
+<style>
+:root{--bg:#eef2ef;--card:#fff;--ink:#16241f;--mute:#5d6b65;--line:#d5ddd8;--acc:#1f6f50;--acc-ink:#fff;--warm:#b4620a;--soft:#e2ece6;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101815;--card:#18231e;--ink:#e6efe9;--mute:#97a79e;--line:#2a3a33;--acc:#4fc08d;--acc-ink:#06130d;--warm:#f0a24a;--soft:#1f2e27;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101815;--card:#18231e;--ink:#e6efe9;--mute:#97a79e;--line:#2a3a33;--acc:#4fc08d;--acc-ink:#06130d;--warm:#f0a24a;--soft:#1f2e27;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Avenir Next","Segoe UI",system-ui,sans-serif}
+main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.nav h1{font-size:1.15rem;margin:0;text-align:center;flex:1;text-transform:capitalize}
+button,input,select{font:inherit;color:inherit}
+.ic{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:1.3rem;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.stat b{display:block;font-size:1.5rem;line-height:1.1}
+.stat span{color:var(--mute);font-size:.8rem}
+.stat small{display:block;color:var(--mute);font-size:.72rem}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);background:var(--soft);border-radius:12px;padding:4px;gap:4px}
+.tabs button{border:0;background:none;padding:10px 4px;border-radius:9px;cursor:pointer;font-weight:600;color:var(--mute)}
+.tabs button[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px}
+.row{display:flex;gap:8px;margin-bottom:8px}
+.row>*{flex:1;min-width:0}
+input,select{width:100%;padding:11px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.go{width:100%;padding:12px;border:0;border-radius:10px;background:var(--acc);color:var(--acc-ink);font-weight:700;cursor:pointer}
+h2{font-size:.95rem;margin:16px 0 6px;color:var(--mute)}
+.item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item div{flex:1;min-width:0}
+.item small{display:block;color:var(--mute)}
+.item em{font-style:normal;font-weight:700}
+.item .w{color:var(--warm)}
+.x{border:0;background:none;color:var(--mute);font-size:1.3rem;cursor:pointer;width:36px;height:36px}
+.empty{color:var(--mute);margin:8px 0 0}
+.note{color:var(--mute);font-size:.8rem;margin-top:18px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.hero{display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,#123d2d,#1f6f50 70%,#2e8f68);color:#fff;margin-bottom:14px;box-shadow:0 10px 24px -12px rgba(18,61,45,.8)}
+.hero strong{display:block;font-size:1.15rem}.hero span{font-size:.85rem;opacity:.85}
+.scene{width:64px;height:64px;perspective:420px;flex:none}
+.cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:spin 14s linear infinite}
+.cube i{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-size:28px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4)}
+.cube i:nth-child(1){transform:translateZ(32px)}.cube i:nth-child(2){transform:rotateY(90deg) translateZ(32px)}.cube i:nth-child(3){transform:rotateY(180deg) translateZ(32px)}.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(32px)}.cube i:nth-child(5){transform:rotateX(90deg) translateZ(32px)}.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(32px)}
+.go3d .stat{animation:flip .7s cubic-bezier(.2,.8,.2,1) both;transform-origin:50% 100%}
+.go3d .stat:nth-child(2){animation-delay:.1s}.go3d .stat:nth-child(3){animation-delay:.2s}
+.go{box-shadow:0 4px 0 rgba(0,0,0,.28);transition:transform .08s,box-shadow .08s}.go:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.2s .2s forwards}
+@keyframes spin{from{transform:rotateX(-20deg) rotateY(0)}to{transform:rotateX(-20deg) rotateY(360deg)}}
+@keyframes flip{from{opacity:0;transform:perspective(500px) rotateX(-75deg)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.cube,.go3d .stat,.draw{animation:none}.draw{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+var KEY='diario-v1';
+var S={food:[],work:[],weight:[],goal:0};
+function key(d){var z=function(n){return String(n).padStart(2,'0')};return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())}
+try{var raw=localStorage.getItem(KEY);if(raw){S=Object.assign(S,JSON.parse(raw))}else{S.weight.push({id:1,d:key(new Date()),kg:87})}}catch(e){S.weight.push({id:1,d:key(new Date()),kg:87})}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var day=key(new Date()),tab='cibo',anim=true;
+function streak(){var d=new Date(),c=0,days={};S.work.forEach(function(x){days[x.d]=1});if(!days[key(d)])d.setDate(d.getDate()-1);while(days[key(d)]){c++;d.setDate(d.getDate()-1)}return c}
+function heroHtml(){var s=streak();return '<div class="hero"><div class="scene"><div class="cube"><i>🚴</i><i>🏃</i><i>🥗</i><i>⚖️</i><i>🔥</i><i>💪</i></div></div><div><strong>Diario allenamenti</strong><span>'+(s?s+(s===1?' giorno':' giorni')+' di fila con un allenamento':'Registra un allenamento per iniziare la serie')+'</span></div></div>'}
+function chart(ws){if(ws.length<2)return '<p class="empty">Registra almeno due pesi per vedere il grafico.</p>';
+  var ks=ws.map(function(x){return x.kg}),mn=Math.min.apply(null,ks)-.5,mx=Math.max.apply(null,ks)+.5,W=300,H=120,P=10;
+  var pts=ws.map(function(x,i){return[P+i*(W-2*P)/(ws.length-1),P+(mx-x.kg)/(mx-mn)*(H-2*P)]});
+  var line=pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ');
+  return '<div class="box"><svg viewBox="0 0 300 120" width="100%" role="img" aria-label="Andamento del peso"><polygon points="'+P+','+(H-P)+' '+line+' '+(W-P)+','+(H-P)+'" fill="var(--acc)" opacity=".15"/><polyline class="draw" pathLength="1" points="'+line+'" fill="none" stroke="var(--acc)" stroke-width="2.5" stroke-linejoin="round"/>'+pts.map(function(p){return'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5" fill="var(--acc)"/>'}).join('')+'</svg></div>'}
+var MEALS=['Colazione','Pranzo','Cena','Spuntino'];
+var MET={Cyclette:6.8,Corsa:9,Camminata:3.8,Altro:5};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function num(v){var x=parseFloat(String(v).replace(',','.'));return isFinite(x)&&x>0?x:0}
+function fmt(x,d){return x.toLocaleString('it-IT',{maximumFractionDigits:d||0})}
+function sortedW(){return S.weight.slice().sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:a.id-b.id})}
+function lastKg(){var w=sortedW();return w.length?w[w.length-1].kg:87}
+function uid(){return Date.now()+Math.floor(Math.random()*1000)}
+function val(id){var e=document.getElementById(id);return e?e.value:''}
+
+function render(){
+  var f=S.food.filter(function(x){return x.d===day}),w=S.work.filter(function(x){return x.d===day});
+  var eat=f.reduce(function(a,x){return a+x.kcal},0),out=w.reduce(function(a,x){return a+x.kcal},0);
+  var today=key(new Date());
+  var lab=new Date(day+'T12:00:00').toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'});
+  var h=heroHtml()+'<div class="nav"><button class="ic" data-a="prev" aria-label="Giorno precedente">‹</button><h1>'+(day===today?'Oggi, ':'')+esc(lab)+'</h1><button class="ic" data-a="next" aria-label="Giorno successivo">›</button></div>';
+  h+='<div class="stats'+(anim?' go3d':'')+'"><div class="stat"><b>'+fmt(eat)+'</b><span>kcal mangiate</span>'+(S.goal?'<small>obiettivo '+fmt(S.goal)+'</small>':'')+'</div>';
+  h+='<div class="stat"><b>'+fmt(out)+'</b><span>kcal bruciate</span></div>';
+  h+='<div class="stat"><b>'+fmt(eat-out)+'</b><span>bilancio</span></div></div>';
+  h+='<div class="tabs">';
+  [['cibo','Cibo'],['all','Allenamento'],['peso','Peso']].forEach(function(t){h+='<button data-a="tab" data-v="'+t[0]+'" aria-pressed="'+(tab===t[0])+'">'+t[1]+'</button>'});
+  h+='</div>';
+  if(tab==='cibo'){
+    h+='<div class="box"><div class="row"><select id="meal">'+MEALS.map(function(m){return'<option>'+m+'</option>'}).join('')+'</select><input id="fk" inputmode="numeric" placeholder="kcal"></div><div class="row"><input id="fn" placeholder="Cosa hai mangiato?"></div><button class="go" data-a="addFood">Aggiungi cibo</button></div>';
+    if(!f.length)h+='<p class="empty">Nessun pasto registrato per questo giorno.</p>';
+    MEALS.forEach(function(m){var l=f.filter(function(x){return x.meal===m});if(!l.length)return;
+      h+='<h2>'+m+' · '+fmt(l.reduce(function(a,x){return a+x.kcal},0))+' kcal</h2><div class="box" style="margin-top:0">';
+      l.forEach(function(x){h+='<div class="item"><div>'+esc(x.name)+'</div><em>'+fmt(x.kcal)+'</em><button class="x" data-a="del" data-t="food" data-id="'+x.id+'" aria-label="Elimina">×</button></div>'});
+      h+='</div>'});
+  }
+  if(tab==='all'){
+    var lim=new Date();lim.setDate(lim.getDate()-6);var lk=key(lim);
+    var wk=S.work.filter(function(x){return x.d>=lk&&x.d<=today}).reduce(function(a,x){return a+x.min},0);
+    h+='<div class="box"><div class="row"><select id="wt"><option>Cyclette</option><option>Corsa</option><option>Camminata</option><option>Altro</option></select><input id="wm" inputmode="numeric" placeholder="Minuti"></div>';
+    h+='<div class="row"><input id="wk" inputmode="decimal" placeholder="Km (facoltativo)"><input id="wc" inputmode="numeric" placeholder="kcal (se vuoto, stima)"></div><button class="go" data-a="addWork">Aggiungi allenamento</button></div>';
+    h+='<p class="empty">Ultimi 7 giorni: '+fmt(wk)+' minuti di allenamento.</p>';
+    if(!w.length)h+='<p class="empty">Nessun allenamento registrato per questo giorno.</p>';
+    else{h+='<div class="box">';w.forEach(function(x){h+='<div class="item"><div>'+esc(x.type)+'<small>'+fmt(x.min)+' min'+(x.km?' · '+fmt(x.km,2)+' km':'')+'</small></div><em class="w">'+(x.est?'~':'')+fmt(x.kcal)+' kcal</em><button class="x" data-a="del" data-t="work" data-id="'+x.id+'" aria-label="Elimina">×</button></div>'});h+='</div>'}
+  }
+  if(tab==='peso'){
+    var ws=sortedW(),first=ws.length?ws[0].kg:0;
+    h+='<div class="box"><div class="row"><input id="kg" inputmode="decimal" placeholder="Peso in kg"></div><button class="go" data-a="addW">Registra peso</button></div>';
+    h+='<div class="box"><label for="goal" class="empty" style="margin:0 0 6px;display:block">Obiettivo kcal giornaliere (facoltativo)</label><div class="row" style="margin:0"><input id="goal" inputmode="numeric" value="'+(S.goal||'')+'"><button class="go" data-a="goal" style="flex:0 0 auto;width:auto;padding:0 16px">Salva</button></div></div>';
+    h+=chart(ws);h+='<h2>Storico peso</h2><div class="box" style="margin-top:0">';
+    ws.slice().reverse().forEach(function(x){var dl=x.kg-first,dt=Math.abs(dl)<0.05?'':' · '+(dl<0?'−':'+')+fmt(Math.abs(dl),1)+' kg dall’inizio';
+      h+='<div class="item"><div>'+fmt(x.kg,1)+' kg<small>'+new Date(x.d+'T12:00:00').toLocaleDateString('it-IT',{day:'numeric',month:'short',year:'numeric'})+dt+'</small></div><button class="x" data-a="del" data-t="weight" data-id="'+x.id+'" aria-label="Elimina">×</button></div>'});
+    h+='</div>';
+  }
+  if(tab==='peso')h+='<div class="box"><div class="row"><button class="go" data-a="exp">Esporta backup</button><button class="go" data-a="imp">Importa backup</button></div><input id="imp" type="file" accept="application/json" hidden></div>';
+  h+='<p class="note">I dati restano salvati su questo dispositivo, nel browser in cui apri la pagina. La stima delle kcal bruciate usa il tuo ultimo peso registrato.</p>';
+  document.getElementById('app').innerHTML=h;anim=false;
+}
+
+function shift(n){var d=new Date(day+'T12:00:00');d.setDate(d.getDate()+n);day=key(d)}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-a]');if(!b)return;var a=b.dataset.a;
+  if(a==='prev'){shift(-1);anim=true}
+  else if(a==='next'){shift(1);anim=true}
+  else if(a==='tab')tab=b.dataset.v;
+  else if(a==='addFood'){var k=num(val('fk')),nm=val('fn').trim();if(!k||!nm){alert('Inserisci cosa hai mangiato e le kcal.');return}S.food.push({id:uid(),d:day,meal:val('meal'),name:nm,kcal:Math.round(k)})}
+  else if(a==='addWork'){var m=num(val('wm'));if(!m){alert('Inserisci i minuti di allenamento.');return}var t=val('wt'),kc=num(val('wc'));
+    S.work.push({id:uid(),d:day,type:t,min:Math.round(m),km:num(val('wk')),kcal:kc?Math.round(kc):Math.round(MET[t]*lastKg()*m/60),est:!kc})}
+  else if(a==='addW'){var kg=num(val('kg'));if(!kg){alert('Inserisci il peso in kg.');return}S.weight.push({id:uid(),d:day,kg:kg})}
+  else if(a==='goal'){S.goal=Math.round(num(val('goal')))}
+  else if(a==='exp'){var bl=new Blob([JSON.stringify(S)],{type:'application/json'}),u=URL.createObjectURL(bl),l=document.createElement('a');l.href=u;l.download='diario-backup-'+key(new Date())+'.json';l.click();setTimeout(function(){URL.revokeObjectURL(u)},1000);return}
+  else if(a==='imp'){document.getElementById('imp').click();return}
+  else if(a==='del'){var t2=b.dataset.t,id=+b.dataset.id;S[t2]=S[t2].filter(function(x){return x.id!==id})}
+  save();render();
+});
+document.addEventListener('change',function(e){if(e.target.id!=='imp'||!e.target.files[0])return;var r=new FileReader();r.onload=function(){try{var o=JSON.parse(r.result);if(!Array.isArray(o.food)||!Array.isArray(o.work)||!Array.isArray(o.weight))throw 0;S=Object.assign({food:[],work:[],weight:[],goal:0},o);save();render();alert('Backup importato.')}catch(x){alert('File di backup non valido.')}};r.readAsText(e.target.files[0])});
+render();
+</script>
+</body>
+</html>
